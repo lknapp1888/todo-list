@@ -1,0 +1,90 @@
+.container {
+    display: grid;
+    grid-template: 5vh 90vh 5vh / 25vw 25vw 25vw 25vw;
+    grid-template-areas: 
+    "header header header header"
+    "nav main main main"
+    "footer footer footer footer";
+}
+
+@media (max-width: 600px) {
+    .container {
+        display: grid;
+        grid-template: 5vh 5vh 85vh 5vh / 25vw 25vw 25vw 25vw;
+        grid-template-areas: 
+        "header header header header"
+        "nav nav nav nav"
+        "main main main main"
+        "footer footer footer footer";
+    }
+  }
+
+header {
+    background-color: rgb(0, 26, 255);
+    grid-area: header;
+}
+
+nav {
+    background-color: rgb(223, 223, 223);
+    grid-area: nav;
+}
+
+main {
+    background-color: rgb(255, 255, 255);
+    grid-area: main;
+}
+
+footer {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    grid-area: footer;
+}
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain) */
+
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
