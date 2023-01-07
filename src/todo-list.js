@@ -30,6 +30,5 @@ export const todoList = {
             this.list.splice(i, 1);
            }
         }
-        
     }
 }
