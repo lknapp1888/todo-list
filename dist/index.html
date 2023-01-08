@@ -10,27 +10,32 @@
     <div class="container">
         <header>Lewis' Todo list</header>
         <nav>
-            <div class="dueCategoryContainer">
-                <p>Overdue</p>
-                <p>Today</p>
-                <p>Next 7 days</p>
-                <p>Priority</p>
+            <div class="categoryContainer">
+                <button class="filterBtn" id="overdueFilterBtn">Overdue (Add functionallity)</button>
+                <button class="filterBtn" id="todayFilterBtn">Today</button>
+                <button class="filterBtn" id="sevenDayFilterBtn">Next 7 days</button>
+                <button class="filterBtn" id="priorityFilterBtn">Priority (All tasks)</button>
             </div>
-            <div class="projectsContainer">
+            <div class="categoryContainer">
                 <h1>Projects</h1>
-                <div class="addProject">
-                    <p>Add Project</p>
-                    <button></button>
-                </div>
+                <button class="projectBtn" id="placeholderProject">placeholderProject</button>
+                <button id="addProjectBtn">Add Project</button>
             </div>
         </nav>
         <main>
+            <h1>Placeholder Title</h1>
             <div class="todoItem">
-                <p>Dummy task content 1</p>
-                <input id="testDate" type="date">
-                <button id="testBtn">Submit</button>
+                <p>Title</p>
+                <p>description....</p>
+                <div class="itemBottom">
+                    <div class="itemInfo">
+                        <input id="testDate" type="date">
+                        <p>1/2/3/4</p>
+                        <p>Project name placeholder</p>
+                    </div>
+                    <button id="testBtn">Edit</button>
+                </div>
             </div>
-
         </main>
         <footer>Lewis Knapp - todo list</footer>
     </div>

@@ -3,7 +3,7 @@ import { parseISO } from 'date-fns';
 import { isBefore } from 'date-fns';
 import { isAfter } from 'date-fns';
 import { subDays } from 'date-fns';
-import { addDays } from 'date-fns'
+import { addDays } from 'date-fns';
 
 export const todoListFilters = {
     filterToday: function (list) {
