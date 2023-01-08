@@ -17,6 +17,7 @@ export const uiLoad = {
         <div class="itemBottom">
             <div class="itemInfo">
                 <input class="itemDateInput" data-dateInput-ref="${item.referenceNum} "type="date">
+                <p>${item.dueDate}<p>
                 <p>${item.priority}</p>
                 <p>${item.project}</p>
             </div>
@@ -31,7 +32,24 @@ export const uiLoad = {
             uiStorage.main.removeChild(uiStorage.main.lastChild);
           }
         for (let i = 0; i < itemArray.length; i++) {
+           
+            if (i === 0) {
+                const dateTitle = document.createElement('h2');
+                dateTitle.classList.add('dateSubHeading');
+                dateTitle.textContent = `${itemArray[i].dueDate}`;
+                uiStorage.main.appendChild(dateTitle);
+            }
+            
             this.loadItem(itemArray[i]);
+
+            /* if statement to check date of next array item (if there is one) 
+            and add new date heading if date is different */
+            if ((itemArray[i + 1]) && (itemArray[i].dueDate !== itemArray[i + 1].dueDate)) {
+                const dateTitleTwo = document.createElement('h2');
+                dateTitleTwo.classList.add('dateSubHeading');
+                dateTitleTwo.textContent = `${itemArray[i + 1].dueDate}`;
+                uiStorage.main.appendChild(dateTitleTwo);
+            }
         }
     },
 

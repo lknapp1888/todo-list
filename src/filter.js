@@ -19,26 +19,33 @@ export const todoListFilters = {
             return ((isAfter(parseISO(e.dueDate), subDays(currentTime, 1))) 
             && (isBefore(parseISO(e.dueDate), addDays(currentTime, 6))));
         })
-        return this.sortPriority(nextSevenDays);
+        return this.sortDate(this.sortPriority(nextSevenDays));
     },
 
     filterAll: function (list) {
-        return this.sortPriority(list);
-    },
-
-    sortPriority: function (list) {
-        const priorityList = list.sort((a, b) => {
-            return a.priority- b.priority;
-          })
-          return priorityList;
+        return this.sortDate(this.sortPriority(list));
     },
 
     filterProject: function (list, projectName) {
         const projectArray = list.filter(e => {
             return e.project === projectName;
         })
-        return this.sortPriority(projectArray);
+        return this.sortDate(this.sortPriority(projectArray));
     },
+
+    sortPriority: function (list) {
+        const priorityList = list.sort((a, b) => {
+            return a.priority - b.priority;
+          })
+          return priorityList;
+    },
+
+    sortDate: function (list) {
+        const dateList = list.sort((a, b) => {
+            return parseISO(a.dueDate) - parseISO(b.dueDate);
+        })
+        return dateList;
+    }
 };
 
 
