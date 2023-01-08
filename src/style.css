@@ -88,6 +88,7 @@ main {
     align-items: center;
     gap: 10px;
     overflow: scroll;
+    padding: 10px;
 }
 
 footer {
@@ -95,6 +96,7 @@ footer {
     color: white;
     grid-area: footer;
 }
+
 
 /*todo item content only*/
 

@@ -10,7 +10,7 @@ export const todoListFilters = {
         const today = list.filter(e => {
             return isToday(parseISO(e.dueDate));
         })
-        return today;
+        return this.sortPriority(today);
     },
 
     filterSevenDay: function (list) {
@@ -19,20 +19,25 @@ export const todoListFilters = {
             return ((isAfter(parseISO(e.dueDate), subDays(currentTime, 1))) 
             && (isBefore(parseISO(e.dueDate), addDays(currentTime, 6))));
         })
-        return nextSevenDays;
+        return this.sortPriority(nextSevenDays);
     },
 
-    filterPriority: function (list) {
-        return list.sort((a, b) => {
+    filterAll: function (list) {
+        return this.sortPriority(list);
+    },
+
+    sortPriority: function (list) {
+        const priorityList = list.sort((a, b) => {
             return a.priority- b.priority;
-          });
+          })
+          return priorityList;
     },
 
     filterProject: function (list, projectName) {
         const projectArray = list.filter(e => {
             return e.project === projectName;
         })
-        return projectArray;
+        return this.sortPriority(projectArray);
     },
 };
 
