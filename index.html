@@ -32,7 +32,32 @@
                         <p>1/2/3/4</p>
                         <p>Project name placeholder</p>
                     </div>
-                    <button id="testBtn">Edit</button>
+                    <button class="itemEditBtn">Edit</button>
+                </div>
+            </div>
+            <div class="todoItem">
+                <input type="text" name="" id="" placeholder="title">
+                <textarea name="" id="" cols="30" rows="6"></textarea>
+                <div class="itemBottom">
+                    <div class="itemInfo">
+                        <input id="testDate" type="date">
+                        <label for="priorityLevel">Priority:</label>
+                        <select id="priorityLevel" name="priorityLevel">
+                          <option value=1>1</option>
+                          <option value=2>2</option>
+                          <option value=3>3</option>
+                          <option value=4>4</option>
+                        </select>
+                        <label for="UIProjects">Project:</label>
+                        <input type="text" list="UIProjects" />
+                            <datalist id="UIProjects">
+                            <option>Proj</option>
+                            <option>project</option>
+                            <option>project 2</option>
+                            <option>fake project</option>
+                            </datalist>
+                    </div>
+                    <button id="itemSubmitBtn">Submit</button>
                 </div>
             </div>
         </main>
