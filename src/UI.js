@@ -18,7 +18,6 @@ export const uiLoad = {
         <p>${item.description}</p>
         <div class="itemBottom">
             <div class="itemInfo">
-                <input class="itemDateInput" data-dateInput-ref="${item.referenceNum} "type="date">
                 <p>${item.dueDate}<p>
                 <p>${item.priority}</p>
                 <p>${item.project}</p>
@@ -28,7 +27,7 @@ export const uiLoad = {
         `;
         uiStorage.main.appendChild(itemDiv);
     },
-    
+
     loadItemArray: function (itemArray) {
         while (uiStorage.main.lastChild) {
             uiStorage.main.removeChild(uiStorage.main.lastChild);
@@ -58,24 +57,26 @@ export const uiLoad = {
 
     editItem: function (refNum) {
         const todoItem = document.querySelector(`.todoItem-${refNum}`);
+        const indexNum = todoList.getIndexNum(refNum);
+        const item = todoList.list[indexNum];
         while (todoItem.lastChild) {
             todoItem.removeChild(todoItem.lastChild);
         }
         todoItem.innerHTML = `
-        <input type="text" name="" id="" placeholder="title">
-        <textarea name="" id="" cols="30" rows="6"></textarea>
+        <input type="text" name="title" id="title" class="itemTitle-${refNum}" placeholder="title" value="${item.title}">
+        <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${refNum}">${item.description}</textarea>
         <div class="itemBottom">
             <div class="itemInfo">
-                <input id="testDate" type="date">
+                <input id="testDate" type="date" class="itemDate-${refNum}" value="${item.dueDate}">
                 <label for="priorityLevel">Priority:</label>
-                <select id="priorityLevel" name="priorityLevel">
+                <select id="priorityLevel" name="priorityLevel" class="itemPriority-${refNum}" value="${item.priority}">
                   <option value=1>1</option>
                   <option value=2>2</option>
                   <option value=3>3</option>
                   <option value=4>4</option>
                 </select>
                 <label for="UIProjects">Project:</label>
-                <input type="text" list="UIProjects" />
+                <input type="text" list="UIProjects" class="itemProject-${refNum}" value="${item.project}"/>
                     <datalist id="UIProjects">
                     <option>Proj</option>
                     <option>project</option>
@@ -85,11 +86,24 @@ export const uiLoad = {
             </div>
             <button class="itemSubmitBtn submitBtn${refNum}">Submit</button>
         </div>
-        `
+        `;
+        this.initSubmitButton(refNum);
     },
 
     submitItem: function (refNum) {
+        const title = document.querySelector(`.itemTitle-${refNum}`).value;
+        const description = document.querySelector(`.itemDescription-${refNum}`).value;
+        const date = document.querySelector(`.itemDate-${refNum}`).value;
+        const priority = document.querySelector(`.itemPriority-${refNum}`).value;
+        const project = document.querySelector(`.itemProject-${refNum}`).value;
 
+        const i = todoList.getIndexNum(refNum);
+                todoList.list[i].title = title;
+                todoList.list[i].description = description;
+                todoList.list[i].dueDate = date;
+                todoList.list[i].priority = priority;
+                todoList.list[i].project = project;
+                console.log(todoList.list[i]);
     },
 
     initFilterBtns: function() {
@@ -111,11 +125,19 @@ export const uiLoad = {
         for (let i = 0; i < item.length; i++) {
             const editBtn = document.querySelector(`.editBtn${item[i].referenceNum}`);
             editBtn.addEventListener('click', () => {
-                console.log(`hello ${item[i].referenceNum}`);
+
                 this.editItem(item[i].referenceNum);
             });
         }
-    }
+    },
+
+    initSubmitButton: function (refNum) {
+        const submitBtn = document.querySelector(`.submitBtn${refNum}`);
+        submitBtn.addEventListener('click', () => {
+            uiLoad.submitItem(refNum);
+        })
+    },
+
 }
 
 export const uiStorage = {

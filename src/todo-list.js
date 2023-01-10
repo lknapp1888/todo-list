@@ -30,5 +30,13 @@ export const todoList = {
             this.list.splice(i, 1);
            }
         }
+    },
+
+    getIndexNum: function (refNum) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].referenceNum === refNum) {
+                return i;
+            };
+        }
     }
 }
