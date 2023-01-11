@@ -103,21 +103,27 @@ export const uiLoad = {
                 todoList.list[i].dueDate = date;
                 todoList.list[i].priority = priority;
                 todoList.list[i].project = project;
-                console.log(todoList.list[i]);
+        
+        if (todoListFilters.activeFilter === 'today') {uiLoad.loadPage(todoListFilters.filterToday(todoList.list))};
+        if (todoListFilters.activeFilter === 'sevenDay') {uiLoad.loadPage(todoListFilters.filterSevenDay(todoList.list))};
+        if (todoListFilters.activeFilter === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))};
+                
     },
 
     initFilterBtns: function() {
        
        //filters
         uiStorage.todayFilterBtn.addEventListener('click', () => {
-                uiLoad.loadItemArray(todoListFilters.filterToday(todoList.list))
+                uiLoad.loadItemArray(todoListFilters.filterToday(todoList.list));
+                todoListFilters.activeFilter = 'today';
         });
         uiStorage.sevenDayFilterBtn.addEventListener('click', () => {
-                uiLoad.loadItemArray(todoListFilters.filterSevenDay(todoList.list))
+                uiLoad.loadItemArray(todoListFilters.filterSevenDay(todoList.list));
+                todoListFilters.activeFilter = 'sevenDay';
         });
         uiStorage.allBtn.addEventListener('click', () => {
             uiLoad.loadItemArray(todoListFilters.filterAll(todoList.list));
-
+                todoListFilters.activeFilter = 'all';
         });
     },
 

@@ -45,7 +45,9 @@ export const todoListFilters = {
             return parseISO(a.dueDate) - parseISO(b.dueDate);
         })
         return dateList;
-    }
+    },
+
+    activeFilter: 'default',
 };
 
 

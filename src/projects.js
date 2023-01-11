@@ -13,3 +13,4 @@ Project.prototype.projectOverview = function () {
     return `The Project is ${this.name}.
     Project description: ${this.description}`;
 }
+
