@@ -47,7 +47,34 @@ export const todoListFilters = {
         return dateList;
     },
 
-    activeFilter: 'default',
+    filterUnique: function (value, index, self) {
+        return self.indexOf(value) === index;
+      },
+
+    getProjectArray: function (list) {
+        let projectArray = [];
+        for (let i = 0; i < list.length; i++) {
+            projectArray.push(list[i].project);
+        }
+        return projectArray.filter(todoListFilters.filterUnique).sort(function(a, b){
+            let nameA = a.toLowerCase();
+            let nameB = b.toLowerCase();
+            if (nameA < nameB) //sort string ascending
+             return -1;
+            if (nameA > nameB)
+             return 1;
+            return 0; //default return value (no sorting)
+           });
+    },
+
+    getProjectClassName: function (project) {
+        let str = project;
+        str = str.replace(/\s+/g, '-').toLowerCase();
+        return str;
+    },
+
+    activeFilter: 'today',
+    activeProjectFilter: '',
 };
 
 

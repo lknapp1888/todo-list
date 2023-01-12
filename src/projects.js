@@ -9,8 +9,5 @@ export default function Project (name, description) {
 Project.prototype.getTodoList = function () {
     return todoListFilters.filterProject(todoList.list, this.name);
 }
-Project.prototype.projectOverview = function () {
-    return `The Project is ${this.name}.
-    Project description: ${this.description}`;
-}
+
 

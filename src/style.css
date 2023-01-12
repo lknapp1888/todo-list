@@ -126,3 +126,7 @@ footer {
     flex-direction: column;
 }
 
+.selectedFilter {
+    background-color: aqua;
+}
+

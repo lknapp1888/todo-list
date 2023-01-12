@@ -38,5 +38,5 @@ export const todoList = {
                 return i;
             };
         }
-    }
+    },
 }
