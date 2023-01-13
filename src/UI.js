@@ -6,9 +6,17 @@ export const uiLoad = {
         //itemArray is the default list to filter by, can be set in index.js
         this.loadItemArray(itemArray);
         this.initEditButton(itemArray); 
+        this.initDeleteBtn(itemArray);
         this.toggleActiveFilterBtn(todoListFilters.activeFilter);
         this.loadProjects(todoList.list);
         uiLoad.initNewItemBtn();
+    },
+
+    reloadPage: function() {
+        const filterStatus = todoListFilters.activeFilter;
+        if (filterStatus === 'today') {uiLoad.loadPage(todoListFilters.filterToday(todoList.list))};
+        if (filterStatus === 'sevenDay') {uiLoad.loadPage(todoListFilters.filterSevenDay(todoList.list))};
+        if (filterStatus === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))};  
     },
 
     loadProjects: function (list) {
@@ -46,7 +54,10 @@ export const uiLoad = {
                 <p>${item.priority}</p>
                 <p>${item.project}</p>
             </div>
-            <button class="itemEditBtn editBtn${item.referenceNum}">Edit</button>
+            <div class="itemBtnContainer">
+                <button class="itemDeleteBtn deleteBtn${item.referenceNum}">Delete</button>
+                <button class="itemEditBtn editBtn${item.referenceNum}">Edit</button>
+            </div>
         </div>
         `;
         uiStorage.main.appendChild(itemDiv);
@@ -176,9 +187,7 @@ export const uiLoad = {
             let newItem = new Todo(title, description, date, priority, project);
         }
         
-        if (todoListFilters.activeFilter === 'today') {uiLoad.loadPage(todoListFilters.filterToday(todoList.list))};
-        if (todoListFilters.activeFilter === 'sevenDay') {uiLoad.loadPage(todoListFilters.filterSevenDay(todoList.list))};
-        if (todoListFilters.activeFilter === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))};         
+        this.reloadPage();
     },
 
     initFilterBtns: function() {
@@ -186,15 +195,15 @@ export const uiLoad = {
        //filters
         uiStorage.todayFilterBtn.addEventListener('click', () => {
             todoListFilters.activeFilter = 'today';    
-            this.loadPage(todoListFilters.filterToday(todoList.list));
+            this.reloadPage();
         });
         uiStorage.sevenDayFilterBtn.addEventListener('click', () => {
             todoListFilters.activeFilter = 'sevenDay';    
-            this.loadPage(todoListFilters.filterSevenDay(todoList.list));
+            this.reloadPage();
         });
         uiStorage.allBtn.addEventListener('click', () => {
             todoListFilters.activeFilter = 'all';
-            this.loadPage(todoListFilters.filterAll(todoList.list));
+            this.reloadPage();
         });
     },
 
@@ -221,6 +230,16 @@ export const uiLoad = {
             const editBtn = document.querySelector(`.editBtn${item[i].referenceNum}`);
             editBtn.addEventListener('click', () => {
                 this.editItem(item[i].referenceNum);
+            });
+        }
+    },
+
+    initDeleteBtn: function (item) {
+        for (let i = 0; i < item.length; i++) {
+            const deleteBtn = document.querySelector(`.deleteBtn${item[i].referenceNum}`);
+            deleteBtn.addEventListener('click', () => {
+                todoList.removeFromList(item[i].referenceNum);
+                this.reloadPage()
             });
         }
     },
