@@ -5,6 +5,7 @@ export const uiLoad = {
     loadPage: function (itemArray) {
         //itemArray is the default list to filter by, can be set in index.js
         this.loadItemArray(itemArray);
+        this.initCompleteBtn(itemArray);
         this.initEditButton(itemArray); 
         this.initDeleteBtn(itemArray);
         this.toggleActiveFilterBtn(todoListFilters.activeFilter);
@@ -46,7 +47,10 @@ export const uiLoad = {
         itemDiv.classList.add('todoItem');
         itemDiv.classList.add(`todoItem-${item.referenceNum}`);
         itemDiv.innerHTML = `
-        <p>${item.title}</p>
+        <div class="itemTopRowContainer">
+            <p>${item.title}</p>
+            <input type="button" id="completeBtn" value="COMPLETE TASK" class="completeBtnIncomplete completeBtn${item.referenceNum}">  
+        </div>
         <p>${item.description}</p>
         <div class="itemBottom">
             <div class="itemInfo">
@@ -55,8 +59,8 @@ export const uiLoad = {
                 <p>${item.project}</p>
             </div>
             <div class="itemBtnContainer">
-                <button class="itemDeleteBtn deleteBtn${item.referenceNum}">Delete</button>
                 <button class="itemEditBtn editBtn${item.referenceNum}">Edit</button>
+                <button class="itemDeleteBtn deleteBtn${item.referenceNum}">Delete</button>
             </div>
         </div>
         `;
@@ -83,8 +87,9 @@ export const uiLoad = {
                 dateTitle.textContent = `${itemArray[i].dueDate}`;
                 uiStorage.main.appendChild(dateTitle);
             }
-            
+
             this.loadItem(itemArray[i]);
+            if (itemArray[i].completionStatus) {this.markComplete(itemArray[i].referenceNum)};
 
             /* if statement to check date of next array item (if there is one) 
             and add new date heading if date is different */
@@ -103,7 +108,10 @@ export const uiLoad = {
             todoItem.removeChild(todoItem.lastChild);
         }
         todoItem.innerHTML = `
-        <input type="text" name="title" id="title" class="itemTitle-${0}" placeholder="title">
+        <div class="itemTopRowContainer"> 
+            <input type="text" name="title" id="title" class="itemTitle-${0}" placeholder="title">">
+            <input type="button" id="completeBtn" value="COMPLETE TASK" class="completeBtnIncomplete completeBtn${0}">  
+        </div>
         <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${0}"></textarea>
         <div class="itemBottom">
             <div class="itemInfo">
@@ -135,11 +143,14 @@ export const uiLoad = {
             todoItem.removeChild(todoItem.lastChild);
         }
         todoItem.innerHTML = `
-        <input type="text" name="title" id="title" class="itemTitle-${refNum}" placeholder="title" value="${item.title}">
+        <div class="itemTopRowContainer"> 
+            <input type="text" name="title" id="title" class="itemTitle-${refNum}" placeholder="title" value="${item.title}">
+            <input type="button" id="completeBtn" value="COMPLETE TASK" class="completeBtnIncomplete completeBtn${refNum}">  
+        </div>
         <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${refNum}">${item.description}</textarea>
         <div class="itemBottom">
-            <div class="itemInfo">
-                <input id="testDate" type="date" class="itemDate-${refNum}" value="${item.dueDate}">
+            <div class="itemInfo">  
+            <input id="testDate" type="date" class="itemDate-${refNum}" value="${item.dueDate}">
                 <label for="priorityLevel">Priority:</label>
                 <select id="priorityLevel" name="priorityLevel" class="itemPriority-${refNum}" value="${item.priority}">
                   <option value=1>1</option>
@@ -190,6 +201,30 @@ export const uiLoad = {
         this.reloadPage();
     },
 
+    markComplete: function(refNum) {
+        const todoItem = document.querySelector(`.todoItem-${refNum}`);
+        const indexNum = todoList.getIndexNum(refNum);
+        const item = todoList.list[indexNum];
+        todoItem.innerHTML = `
+        <div class="itemTopRowContainer">
+            <p><s>${item.title}</s></p>
+            <input type="button" id="completeBtn" value="REOPEN" class="completeBtnComplete completeBtn${item.referenceNum}">  
+        </div>
+        <p><s>${item.description}</s></p>
+        <div class="itemBottom">
+            <div class="itemInfo">
+                <p><s>${item.dueDate}</s><p>
+                <p><s>${item.priority}</s></p>
+                <p><s>${item.project}</s></p>
+            </div>
+            <div class="itemBtnContainer">
+                <button class="archiveBtn archiveBtn${item.referenceNum}">Archive (not functional)</button>
+                <button class="itemDeleteBtn deleteBtn${item.referenceNum}">Delete</button>
+            </div>
+        </div>
+        `;
+    },
+
     initFilterBtns: function() {
        
        //filters
@@ -227,9 +262,24 @@ export const uiLoad = {
 
     initEditButton: function (item) {
         for (let i = 0; i < item.length; i++) {
+            if (item[i].completionStatus) {continue};
             const editBtn = document.querySelector(`.editBtn${item[i].referenceNum}`);
             editBtn.addEventListener('click', () => {
                 this.editItem(item[i].referenceNum);
+            });
+        }
+    },
+
+    initCompleteBtn: function (item) {
+        for (let i = 0; i < item.length; i++) {
+            const completeBtn = document.querySelector(`.completeBtn${item[i].referenceNum}`);
+            completeBtn.addEventListener('click', () => {
+                const correctIndexNum = todoList.getIndexNum(item[i].referenceNum);
+                todoList.list[correctIndexNum].completionStatus = !todoList.list[correctIndexNum].completionStatus;
+                console.log(todoList.list[correctIndexNum])
+                todoList.list[correctIndexNum].completionStatus ? this.markComplete(item[i].referenceNum) : this.editItem(item[i].referenceNum);
+                this.initCompleteBtn([todoList.list[correctIndexNum]]);
+                if (item[i].completionStatus) {this.initDeleteBtn([item[i]])};
             });
         }
     },

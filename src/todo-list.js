@@ -5,6 +5,8 @@ export default function Todo (title, description, dueDate, priority, project) {
     this.priority = priority;
     this.project = project;
     this.referenceNum = todoList.itemTicker;
+    this.completionStatus = false;
+    this.archiveStatus = false;
     todoList.addToList(this);
     }
 

@@ -109,6 +109,11 @@ footer {
     width: 80%;
 }
 
+.itemTopRowContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
 .itemBottom {
     display: flex;
     justify-content: space-between;
