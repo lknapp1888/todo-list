@@ -10,15 +10,18 @@ export const uiLoad = {
         this.initDeleteBtn(itemArray);
         this.toggleActiveFilterBtn(todoListFilters.activeFilter);
         this.loadProjects(todoList.list);
+        this.initProjectFilterBtns(todoList.list);
         uiLoad.initNewItemBtn();
     },
 
     reloadPage: function() {
         const filterStatus = todoListFilters.activeFilter;
-        if (filterStatus === 'today') {uiLoad.loadPage(todoListFilters.filterToday(todoList.list))};
-        if (filterStatus === 'sevenDay') {uiLoad.loadPage(todoListFilters.filterSevenDay(todoList.list))};
-        if (filterStatus === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))}; 
-        if (filterStatus === 'overdue') {uiLoad.loadPage(todoListFilters.filterOverdue(todoList.list))};   
+        const projectStatus = todoListFilters.activeProjectFilter;
+        uiLoad.loadPage(todoListFilters.filterDateAndProject(todoList.list, projectStatus, filterStatus))
+        // if (filterStatus === 'today') {uiLoad.loadPage(todoListFilters.filterToday(todoList.list))};
+        // if (filterStatus === 'sevenDay') {uiLoad.loadPage(todoListFilters.filterSevenDay(todoList.list))};
+        // if (filterStatus === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))}; 
+        // if (filterStatus === 'overdue') {uiLoad.loadPage(todoListFilters.filterOverdue(todoList.list))};   
     },
 
     loadProjects: function (list) {
@@ -33,12 +36,24 @@ export const uiLoad = {
           heading.innerText = 'Projects';
           uiStorage.projectNavBar.appendChild(heading);
 
-            for (let i = 0; i < uniqueList.length; i++) {
+            for (let i = 0; i <= uniqueList.length; i++) {
                 if (uniqueList[i] === '') {continue};
                 const projectItem = document.createElement('button');
                 projectItem.classList.add('projectBtn');
-                projectItem.classList.add(`projectBtn-${todoListFilters.getProjectClassName(uniqueList[i])}`)
-                projectItem.innerText = uniqueList[i];
+                if (i < uniqueList.length) {
+                    projectItem.classList.add(`projectBtn-${todoListFilters.getProjectClassName(uniqueList[i])}`)
+                    if (todoListFilters.getProjectClassName(uniqueList[i]) === todoListFilters.activeProjectFilter) {
+                        projectItem.classList.add('selectedFilter');
+                    }
+                    projectItem.innerText = uniqueList[i];
+                }
+                if (i === uniqueList.length) {
+                    projectItem.classList.add('projectBtn-all');
+                    if (todoListFilters.activeProjectFilter === 'all') {
+                        projectItem.classList.add('selectedFilter');
+                    }
+                    projectItem.innerText = 'all projects';
+                }
                 uiStorage.projectNavBar.appendChild(projectItem);
             };
     },
@@ -125,7 +140,7 @@ export const uiLoad = {
                   <option value=4>4</option>
                 </select>
                 <label for="UIProjects">Project:</label>
-                <input type="text" list="UIProjects" class="itemProject-${0}"/>
+                <input type="text" list="UIProjects" class="itemProject-${0}" value="${todoListFilters.activeProjectFilter}"/>
                     <datalist id="UIProjects">
                         ${this.generateArrayOptionList(todoListFilters.getProjectArray(todoList.list))}
                     </datalist>
@@ -247,6 +262,30 @@ export const uiLoad = {
         });
     },
 
+    initProjectFilterBtns: function(list) {
+        const projects = todoListFilters.getProjectArray(todoList.list);
+        projects.push('all');
+        for (let i = 0; i < projects.length; i++) {
+            const projectClass = todoListFilters.getProjectClassName(projects[i]);
+            const projectBtn = document.querySelector(`.projectBtn-${projectClass}`);
+            projectBtn.addEventListener('click', () => {
+                todoListFilters.activeProjectFilter = `${projectClass}`
+                console.log(`${projectClass} button is working`);
+                this.toggleActiveProjectFilterBtn(projectClass);
+                this.reloadPage();
+            })
+        }
+    },
+
+    toggleActiveProjectFilterBtn: function (projectClass) {
+        const projectBtns = document.querySelectorAll('.projectBtn');
+        console.log(projectBtns[0].classList[1]);
+        for (let i = 0; i < projectBtns.length; i++) {
+            (projectBtns[i].classList[1] === `projectBtn-${projectClass}`) ?
+             projectBtns[i].classList.add('selectedFilter') : projectBtns[i].classList.remove('selectedFilter');        
+        }
+    },
+
     toggleActiveFilterBtn: function (filter) {
         if (filter === 'overdue') {
             overdueFilterBtn.classList.add('selectedFilter');
@@ -342,7 +381,6 @@ export const uiStorage = {
     todayFilterBtn: document.getElementById('todayFilterBtn'),
     sevenDayFilterBtn: document.getElementById('sevenDayFilterBtn'),
     allBtn: document.getElementById('allBtn'),
-    projectFilterBtn: document.getElementById('projectFilterBtn'),
     addProjectBtn: document.getElementById('addProjectBtn'),
 }
 

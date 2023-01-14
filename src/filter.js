@@ -36,10 +36,32 @@ export const todoListFilters = {
     },
 
     filterProject: function (list, projectName) {
+        if (projectName === 'all') {return this.sortDate(this.sortPriority(list))};
         const projectArray = list.filter(e => {
-            return e.project === projectName;
+            return this.getProjectClassName(e.project) === projectName;
         })
         return this.sortDate(this.sortPriority(projectArray));
+    },
+
+    filterDateAndProject: function(list, project, dateFilter) {
+        let dateFiltered = '';
+        if (dateFilter === 'overdue') {
+            dateFiltered = this.filterOverdue(list);
+        };
+        if (dateFilter === 'today') {
+            dateFiltered = this.filterToday(list);
+        };
+        if (dateFilter === 'sevenDay') {
+            dateFiltered = this.filterSevenDay(list);
+        };
+        if (dateFilter === 'all') {
+            dateFiltered = this.filterAll(list);
+        };
+
+        if (this.activeProjectFilter === '' || this.activeProjectFilter === 'all') {
+            return dateFiltered;
+        }
+        return this.filterProject(dateFiltered, project);
     },
 
     sortPriority: function (list) {
