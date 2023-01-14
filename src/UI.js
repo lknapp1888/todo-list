@@ -17,7 +17,8 @@ export const uiLoad = {
         const filterStatus = todoListFilters.activeFilter;
         if (filterStatus === 'today') {uiLoad.loadPage(todoListFilters.filterToday(todoList.list))};
         if (filterStatus === 'sevenDay') {uiLoad.loadPage(todoListFilters.filterSevenDay(todoList.list))};
-        if (filterStatus === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))};  
+        if (filterStatus === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))}; 
+        if (filterStatus === 'overdue') {uiLoad.loadPage(todoListFilters.filterOverdue(todoList.list))};   
     },
 
     loadProjects: function (list) {
@@ -228,6 +229,10 @@ export const uiLoad = {
     initFilterBtns: function() {
        
        //filters
+        uiStorage.overdueFilterBtn.addEventListener('click', () => {
+            todoListFilters.activeFilter = 'overdue';
+            this.reloadPage();
+        });
         uiStorage.todayFilterBtn.addEventListener('click', () => {
             todoListFilters.activeFilter = 'today';    
             this.reloadPage();
@@ -243,17 +248,26 @@ export const uiLoad = {
     },
 
     toggleActiveFilterBtn: function (filter) {
+        if (filter === 'overdue') {
+            overdueFilterBtn.classList.add('selectedFilter');
+            todayFilterBtn.classList.remove('selectedFilter');
+            sevenDayFilterBtn.classList.remove('selectedFilter');
+            allBtn.classList.remove('selectedFilter');
+        };
         if (filter === 'today') {
+            overdueFilterBtn.classList.remove('selectedFilter');
             todayFilterBtn.classList.add('selectedFilter');
             sevenDayFilterBtn.classList.remove('selectedFilter');
             allBtn.classList.remove('selectedFilter');
         };
         if (filter === 'sevenDay') {
+            overdueFilterBtn.classList.remove('selectedFilter');
             todayFilterBtn.classList.remove('selectedFilter');
             sevenDayFilterBtn.classList.add('selectedFilter');
             allBtn.classList.remove('selectedFilter');
         };
         if (filter === 'all') {
+            overdueFilterBtn.classList.remove('selectedFilter');
             todayFilterBtn.classList.remove('selectedFilter');
             sevenDayFilterBtn.classList.remove('selectedFilter');
             allBtn.classList.add('selectedFilter');

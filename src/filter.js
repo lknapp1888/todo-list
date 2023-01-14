@@ -4,8 +4,17 @@ import { isBefore } from 'date-fns';
 import { isAfter } from 'date-fns';
 import { subDays } from 'date-fns';
 import { addDays } from 'date-fns';
+import { isPast } from 'date-fns';
 
 export const todoListFilters = {
+    filterOverdue: function (list) {
+        const overdue = list.filter(e => {
+            return isPast(addDays(parseISO(e.dueDate), 1));
+            // adding 1 day as isPast() was returning true for current day
+        })
+        return this.sortPriority(overdue);
+    },
+    
     filterToday: function (list) {
         const today = list.filter(e => {
             return isToday(parseISO(e.dueDate));
