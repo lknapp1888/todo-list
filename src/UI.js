@@ -1,5 +1,7 @@
 import Todo, {todoList} from './todo-list.js';
 import { todoListFilters } from './filter.js';
+import { format } from 'date-fns';
+import { parseISO } from 'date-fns';
 
 export const uiLoad = {
     loadPage: function (itemArray) {
@@ -12,16 +14,21 @@ export const uiLoad = {
         this.loadProjects(todoList.list);
         this.initProjectFilterBtns(todoList.list);
         uiLoad.initNewItemBtn();
+        this.loadHeaderText();
+    },
+
+    loadHeaderText: function () {
+        const project = todoListFilters.addSpaceRemoveHyphen(todoListFilters.activeProjectFilter);
+        let filter = todoListFilters.activeFilter;
+        if (filter === 'sevenDay') {filter = 'next 7 days'};
+        todoListFilters.a
+        uiStorage.headerText.textContent = `${project} | ${filter}`
     },
 
     reloadPage: function() {
         const filterStatus = todoListFilters.activeFilter;
         const projectStatus = todoListFilters.activeProjectFilter;
         uiLoad.loadPage(todoListFilters.filterDateAndProject(todoList.list, projectStatus, filterStatus))
-        // if (filterStatus === 'today') {uiLoad.loadPage(todoListFilters.filterToday(todoList.list))};
-        // if (filterStatus === 'sevenDay') {uiLoad.loadPage(todoListFilters.filterSevenDay(todoList.list))};
-        // if (filterStatus === 'all') {uiLoad.loadPage(todoListFilters.filterAll(todoList.list))}; 
-        // if (filterStatus === 'overdue') {uiLoad.loadPage(todoListFilters.filterOverdue(todoList.list))};   
     },
 
     loadProjects: function (list) {
@@ -52,7 +59,7 @@ export const uiLoad = {
                     if (todoListFilters.activeProjectFilter === 'all') {
                         projectItem.classList.add('selectedFilter');
                     }
-                    projectItem.innerText = 'all projects';
+                    projectItem.innerText = 'ALL PROJECTS';
                 }
                 uiStorage.projectNavBar.appendChild(projectItem);
             };
@@ -65,14 +72,14 @@ export const uiLoad = {
         itemDiv.innerHTML = `
         <div class="itemTopRowContainer">
             <p>${item.title}</p>
-            <input type="button" id="completeBtn" value="COMPLETE TASK" class="completeBtnIncomplete completeBtn${item.referenceNum}">  
+            <input type="button" id="completeBtn" value="Complete" class="completeBtnIncomplete completeBtn${item.referenceNum}">  
         </div>
         <p>${item.description}</p>
         <div class="itemBottom">
             <div class="itemInfo">
-                <p>${item.dueDate}<p>
-                <p>${item.priority}</p>
+                <p>${format(parseISO(item.dueDate), 'dd MMM yyyy')}<p>
                 <p>${item.project}</p>
+                <p>Priority: ${item.priority}</p>
             </div>
             <div class="itemBtnContainer">
                 <button class="itemEditBtn editBtn${item.referenceNum}">Edit</button>
@@ -91,6 +98,7 @@ export const uiLoad = {
           newItemContainer.id = 'newItemContainer';
           newItemContainer.classList.add('todoItem')
           newItemContainer.classList.add('todoItem-0');
+          newItemContainer.classList.add('todoItem-0-active');
           const newItemBtn = document.createElement('button');
           newItemBtn.classList.add ('newItemBtn');
           newItemBtn.innerText = 'SUBMIT NEW ITEM';
@@ -100,7 +108,7 @@ export const uiLoad = {
             if (i === 0) {
                 const dateTitle = document.createElement('h2');
                 dateTitle.classList.add('dateSubHeading');
-                dateTitle.textContent = `${itemArray[i].dueDate}`;
+                dateTitle.textContent = `${format(parseISO(itemArray[i].dueDate), 'dd MMMM yyyy')}`;
                 uiStorage.main.appendChild(dateTitle);
             }
 
@@ -112,7 +120,7 @@ export const uiLoad = {
             if ((itemArray[i + 1]) && (itemArray[i].dueDate !== itemArray[i + 1].dueDate)) {
                 const dateTitleTwo = document.createElement('h2');
                 dateTitleTwo.classList.add('dateSubHeading');
-                dateTitleTwo.textContent = `${itemArray[i + 1].dueDate}`;
+                dateTitleTwo.textContent = `${format(parseISO(itemArray[i + 1].dueDate), 'dd MMMM yyyy')}`;
                 uiStorage.main.appendChild(dateTitleTwo);
             }
         }
@@ -123,10 +131,12 @@ export const uiLoad = {
         while (todoItem.lastChild) {
             todoItem.removeChild(todoItem.lastChild);
         }
+        let project = todoListFilters.activeProjectFilter;
+        if (project === 'all') {project = ''};
         todoItem.innerHTML = `
         <div class="itemTopRowContainer"> 
-            <input type="text" name="title" id="title" class="itemTitle-${0}" placeholder="title">">
-            <input type="button" id="completeBtn" value="COMPLETE TASK" class="completeBtnIncomplete completeBtn${0}">  
+            <input type="text" name="title" id="title" class="itemTitle-${0}" placeholder="title">
+            <input type="button" id="completeBtn" value="Complete" class="completeBtnIncomplete completeBtn${0}">  
         </div>
         <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${0}"></textarea>
         <div class="itemBottom">
@@ -134,13 +144,12 @@ export const uiLoad = {
                 <input id="testDate" type="date" class="itemDate-${0}"">
                 <label for="priorityLevel">Priority:</label>
                 <select id="priorityLevel" name="priorityLevel" class="itemPriority-${0}">
-                  <option value=1>1</option>
-                  <option value=2>2</option>
-                  <option value=3>3</option>
-                  <option value=4>4</option>
+                  <option value=1>Priority 1</option>
+                  <option value=2>Priority 2</option>
+                  <option value=3>Priority 3</option>
+                  <option value=4>Priority 4</option>
                 </select>
-                <label for="UIProjects">Project:</label>
-                <input type="text" list="UIProjects" class="itemProject-${0}" value="${todoListFilters.activeProjectFilter}"/>
+                <input type="text" list="UIProjects" class="itemProject-${0}" value="${project}" placeholder="new or existing project"/>
                     <datalist id="UIProjects">
                         ${this.generateArrayOptionList(todoListFilters.getProjectArray(todoList.list))}
                     </datalist>
@@ -161,21 +170,19 @@ export const uiLoad = {
         todoItem.innerHTML = `
         <div class="itemTopRowContainer"> 
             <input type="text" name="title" id="title" class="itemTitle-${refNum}" placeholder="title" value="${item.title}">
-            <input type="button" id="completeBtn" value="COMPLETE TASK" class="completeBtnIncomplete completeBtn${refNum}">  
+            <input type="button" id="completeBtn" value="Complete" class="completeBtnIncomplete completeBtn${refNum}">  
         </div>
         <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${refNum}">${item.description}</textarea>
         <div class="itemBottom">
             <div class="itemInfo">  
             <input id="testDate" type="date" class="itemDate-${refNum}" value="${item.dueDate}">
-                <label for="priorityLevel">Priority:</label>
                 <select id="priorityLevel" name="priorityLevel" class="itemPriority-${refNum}" value="${item.priority}">
-                  <option value=1>1</option>
-                  <option value=2>2</option>
-                  <option value=3>3</option>
-                  <option value=4>4</option>
+                <option value=1>Priority 1</option>
+                <option value=2>Priority 2</option>
+                <option value=3>Priority 3</option>
+                <option value=4>Priority 4</option>
                 </select>
-                <label for="UIProjects">Project:</label>
-                <input type="text" list="UIProjects" class="itemProject-${refNum}" value="${item.project}"/>
+                <input type="text" list="UIProjects" class="itemProject-${refNum}" value="${item.project}" placeholder="new or existing project"/>
                     <datalist id="UIProjects">
                         ${this.generateArrayOptionList(todoListFilters.getProjectArray(todoList.list))}
                     </datalist>
@@ -201,6 +208,8 @@ export const uiLoad = {
         const priority = document.querySelector(`.itemPriority-${refNum}`).value;
         const project = document.querySelector(`.itemProject-${refNum}`).value;
 
+        // add validation functions here for each form input. If item does not pass, add error message and return
+
         if (refNum > 0) {
         const i = todoList.getIndexNum(refNum);
                 todoList.list[i].title = title;
@@ -213,7 +222,6 @@ export const uiLoad = {
         if (refNum === 0) {
             let newItem = new Todo(title, description, date, priority, project);
         }
-        
         this.reloadPage();
     },
 
@@ -375,6 +383,7 @@ export const uiStorage = {
     main: document.querySelector('main'),
     projectNavBar: document.querySelector('.projectNavContainer'),
     newItemContainer: document.getElementById('newItemContainer'),
+    headerText: document.getElementById('headerText'),
 
     //Buttons
     overdueFilterBtn: document.getElementById('overdueFilterBtn'),

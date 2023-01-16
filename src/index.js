@@ -10,7 +10,7 @@ const third = new Todo('third title', 'dummy desc three', '2023-01-14', 1, 'Brid
 const fourth = new Todo('fourth title', 'desc 4', '2023-01-11', 1, 'Brexit');
 
 // set the filter function to dictate the default starting filter
-uiLoad.loadPage(todoListFilters.filterToday(todoList.list));
+uiLoad.loadPage(todoListFilters.filterOverdue(todoList.list));
 uiLoad.initFilterBtns();
 console.log(todoListFilters.getProjectArray(todoList.list));
 

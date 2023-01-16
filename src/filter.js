@@ -12,7 +12,7 @@ export const todoListFilters = {
             return isPast(addDays(parseISO(e.dueDate), 1));
             // adding 1 day as isPast() was returning true for current day
         })
-        return this.sortPriority(overdue);
+        return this.sortDate(this.sortPriority(overdue));
     },
     
     filterToday: function (list) {
@@ -104,8 +104,14 @@ export const todoListFilters = {
         return str;
     },
 
-    activeFilter: 'today',
-    activeProjectFilter: '',
+    addSpaceRemoveHyphen: function (name) {
+        let str = name;
+        str = str.replace(/[\W]/g, ' ').toUpperCase();
+        return str;
+    },
+
+    activeFilter: 'overdue',
+    activeProjectFilter: 'all',
 };
 
 
