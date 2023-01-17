@@ -37,8 +37,6 @@ export const uiLoad = {
           };
 
           const uniqueList = todoListFilters.getProjectArray(list);
-          console.log('hello')
-
           const heading = document.createElement('h1');
           heading.innerText = 'Projects';
           uiStorage.projectNavBar.appendChild(heading);
