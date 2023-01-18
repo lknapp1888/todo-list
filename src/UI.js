@@ -221,6 +221,7 @@ export const uiLoad = {
             let newItem = new Todo(title, description, date, priority, project);
         }
         this.reloadPage();
+        todoList.reloadStorage();
     },
 
     markComplete: function(refNum) {
@@ -269,8 +270,13 @@ export const uiLoad = {
     },
 
     initProjectFilterBtns: function(list) {
-        const projects = todoListFilters.getProjectArray(todoList.list);
-        projects.push('all');
+        const projects = ['all'];
+        const projectArray = todoListFilters.getProjectArray(todoList.list);
+        if (projectArray[0] !== '') {
+            for (let i = 0; i < projectArray.length; i++) {
+                projects.push(projectArray[i]);
+            }
+        }
         for (let i = 0; i < projects.length; i++) {
             const projectClass = todoListFilters.getProjectClassName(projects[i]);
             const projectBtn = document.querySelector(`.projectBtn-${projectClass}`);

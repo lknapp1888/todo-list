@@ -28,6 +28,7 @@ export const todoList = {
         this.itemTicker++;
         localStorage.setItem("localStorageList", JSON.stringify(todoList.list));
     },
+
     loadListFromStorage: function () {
         const item = JSON.parse(localStorage.getItem("localStorageList"));
         if (!item) return;
@@ -45,6 +46,11 @@ export const todoList = {
             localStorage.setItem("localStorageList", JSON.stringify(todoList.list));
            }
         }
+    },
+
+    reloadStorage: function () {
+        localStorage.removeItem("localStorageList");
+        localStorage.setItem("localStorageList", JSON.stringify(todoList.list));
     },
 
     getIndexNum: function (refNum) {
