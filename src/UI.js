@@ -72,7 +72,7 @@ export const uiLoad = {
             <p>${item.title}</p>
             <input type="button" id="completeBtn" value="Complete" class="completeBtnIncomplete completeBtn${item.referenceNum}">  
         </div>
-        <p>${item.description}</p>
+        <p class="itemDescription">${item.description}</p>
         <div class="itemBottom">
             <div class="itemInfo">
                 <p>${format(parseISO(item.dueDate), 'dd MMM yyyy')}<p>
@@ -122,6 +122,7 @@ export const uiLoad = {
                 uiStorage.main.appendChild(dateTitleTwo);
             }
         }
+
     },
 
     editNewItem: function () {
@@ -132,14 +133,14 @@ export const uiLoad = {
         let project = todoListFilters.activeProjectFilter;
         if (project === 'all') {project = ''};
         todoItem.innerHTML = `
+        <form>
         <div class="itemTopRowContainer"> 
-            <input type="text" name="title" id="title" class="itemTitle-${0}" placeholder="title">
-            <input type="button" id="completeBtn" value="Complete" class="completeBtnIncomplete completeBtn${0}">  
+            <input type="text" name="title" id="title" class="itemTitle-${0}" placeholder="title" minlength="1" maxlength="100" required> 
         </div>
-        <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${0}"></textarea>
+        <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${0}" maxlength="500"></textarea>
         <div class="itemBottom">
             <div class="itemInfo">
-                <input id="testDate" type="date" class="itemDate-${0}"">
+                <input id="testDate" type="date" class="itemDate-${0}"" required>
                 <label for="priorityLevel">Priority:</label>
                 <select id="priorityLevel" name="priorityLevel" class="itemPriority-${0}">
                   <option value=1>Priority 1</option>
@@ -147,13 +148,14 @@ export const uiLoad = {
                   <option value=3>Priority 3</option>
                   <option value=4>Priority 4</option>
                 </select>
-                <input type="text" list="UIProjects" class="itemProject-${0}" value="${project}" placeholder="new or existing project"/>
+                <input type="text" list="UIProjects" class="itemProject-${0}" value="${project}" placeholder="new or existing project" minlength="1" maxlength="50" required/>
                     <datalist id="UIProjects">
                         ${this.generateArrayOptionList(todoListFilters.getProjectArray(todoList.list))}
                     </datalist>
             </div>
             <button class="itemSubmitBtn submitBtn${0}">Submit</button>
         </div>
+        </form>
         `;
         this.initSubmitNewItemButton();
     },
@@ -166,27 +168,28 @@ export const uiLoad = {
             todoItem.removeChild(todoItem.lastChild);
         }
         todoItem.innerHTML = `
+        <form>
         <div class="itemTopRowContainer"> 
-            <input type="text" name="title" id="title" class="itemTitle-${refNum}" placeholder="title" value="${item.title}">
-            <input type="button" id="completeBtn" value="Complete" class="completeBtnIncomplete completeBtn${refNum}">  
+            <input type="text" name="title" id="title" class="itemTitle-${refNum}" placeholder="title" value="${item.title}" minlength="1" maxlength="100" required>  
         </div>
-        <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${refNum}">${item.description}</textarea>
+        <textarea name="description" id="description" cols="30" rows="6" class="itemDescription-${refNum}" maxlength="500">${item.description}</textarea>
         <div class="itemBottom">
             <div class="itemInfo">  
-            <input id="testDate" type="date" class="itemDate-${refNum}" value="${item.dueDate}">
+            <input id="testDate" type="date" class="itemDate-${refNum}" value="${item.dueDate}" required>
                 <select id="priorityLevel" name="priorityLevel" class="itemPriority-${refNum}" value="${item.priority}">
                 <option value=1>Priority 1</option>
                 <option value=2>Priority 2</option>
                 <option value=3>Priority 3</option>
                 <option value=4>Priority 4</option>
                 </select>
-                <input type="text" list="UIProjects" class="itemProject-${refNum}" value="${item.project}" placeholder="new or existing project"/>
+                <input type="text" list="UIProjects" class="itemProject-${refNum}" value="${item.project}" placeholder="new or existing project" minlength="1" maxlength="50" required/>
                     <datalist id="UIProjects">
                         ${this.generateArrayOptionList(todoListFilters.getProjectArray(todoList.list))}
                     </datalist>
             </div>
             <button class="itemSubmitBtn submitBtn${refNum}">Submit</button>
         </div>
+        </form>
         `;
         this.initSubmitButton(refNum);
     },
@@ -205,8 +208,12 @@ export const uiLoad = {
         const date = document.querySelector(`.itemDate-${refNum}`).value;
         const priority = document.querySelector(`.itemPriority-${refNum}`).value;
         const project = document.querySelector(`.itemProject-${refNum}`).value;
-
-        // add validation functions here for each form input. If item does not pass, add error message and return
+        
+        if ((title.length < 2) || (title.length > 100)) return;
+        if (description.length > 500) return;
+        if (date === '') return;
+        if (project === '') return;
+        
 
         if (refNum > 0) {
         const i = todoList.getIndexNum(refNum);

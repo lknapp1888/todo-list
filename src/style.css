@@ -47,6 +47,12 @@
        border-spacing: 0;
    }
 
+   p {
+    word-break: break-all;
+    white-space: normal;
+}
+
+
 /*////////////////////////////////////////////////*/
 * {
     --background-color: white;
@@ -121,7 +127,6 @@ main {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    overflow: scroll;
     padding: 10px;
     font-family: 'MyFont';
 }
@@ -134,6 +139,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
 }
 
 
@@ -175,6 +181,10 @@ footer {
     gap: 10px;
     padding-top: 2px;
     flex-wrap: wrap;
+}
+
+textarea {
+    width: 99%;
 }
 
 .itemBtnContainer {
@@ -274,5 +284,8 @@ nav h1 {
     background-color: aliceblue;
     color: var(--nav-color);
 }
+
+
+  
 
 
