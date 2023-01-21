@@ -7,7 +7,7 @@ todoList.loadListFromStorage();
 // set the filter function to dictate the default starting filter
 uiLoad.loadPage(todoListFilters.filterOverdue(todoList.list));
 uiLoad.initFilterBtns();
-
+uiLoad.initHamburger();
 
 
 

@@ -255,6 +255,15 @@ export const uiLoad = {
         `;
     },
 
+    initHamburger: function() {
+        const menuBtn = document.querySelector('.hamburger');
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('is-active');
+            uiStorage.nav.classList.toggle('navHidden');
+            uiStorage.container.classList.toggle('navActive')
+        })
+    },
+
     initFilterBtns: function() {
        
        //filters
@@ -395,6 +404,8 @@ export const uiStorage = {
     projectNavBar: document.querySelector('.projectNavContainer'),
     newItemContainer: document.getElementById('newItemContainer'),
     headerText: document.getElementById('headerText'),
+    nav: document.querySelector('nav'),
+    container: document.querySelector('.container'),
 
     //Buttons
     overdueFilterBtn: document.getElementById('overdueFilterBtn'),

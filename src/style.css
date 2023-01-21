@@ -71,12 +71,22 @@
 
 .container {
     display: grid;
-    grid-template: 5vh 90vh 5vh / 25vw 25vw 25vw 25vw;
+    grid-template: 5vh 90vh 5vh / min-content 1fr 1fr 1fr;
     grid-template-areas: 
-    "nav header header header"
+    "hamburger header header header"
+    "main main main main"
+    "footer footer footer footer";
+}
+
+.container.navActive {
+    display: grid;
+    grid-template: 5vh 90vh 5vh / 1fr 1fr 1fr 1fr;
+    grid-template-areas: 
+    "hamburger header header header"
     "nav main main main"
     "footer footer footer footer";
 }
+
 
 @media (max-width: 600px) {
     * {
@@ -85,17 +95,23 @@
     
     .container {
         display: grid;
-        grid-template: 5vh 65vh 25vh 5vh / 25vw 25vw 25vw 25vw;
+        grid-template: 5vh 85vh 5vh 5vh / 1fr 1fr  1fr 1fr;
         grid-template-areas: 
         "header header header header"
         "main main main main"
-        "nav nav nav nav"
+        "hamburger hamburger hamburger hamburger"
         "footer footer footer footer";
     }
 
-
-    header h1 {
-        font-size: 10px;
+    .container.navActive {
+        display: grid;
+        grid-template: 5vh 14vh 6vh 70vh 5vh / 1fr 1fr  1fr 1fr;
+        grid-template-areas: 
+        "header header header header"
+        "main main main main"
+        "hamburger hamburger hamburger hamburger"
+        "nav nav nav nav"
+        "footer footer footer footer";
     }
   }
 
@@ -120,6 +136,10 @@ nav {
     overflow: auto;
 }
 
+nav.navHidden {
+    display: none;
+}
+
 main {
     background-color: #e0f2fe;
     grid-area: main;
@@ -129,6 +149,7 @@ main {
     gap: 10px;
     padding: 10px;
     font-family: 'MyFont';
+    overflow:scroll;
 }
 
 footer {
@@ -260,6 +281,47 @@ textarea {
 }
 
 /*nav category and project containers */
+
+.hamburgerContainer {
+    background-color: #0369a1;
+    grid-area: hamburger;
+    display: flex;
+    justify-content: center;
+} 
+
+.hamburger {
+    position: relative;
+    display: block;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    appearance: none;
+    background: none;
+    outline: none;
+    border: none;
+}
+
+.hamburger .bar, .hamburger:after, .hamburger:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    margin: 6px 0px;
+    transition: 0.4s;
+}
+
+.hamburger.is-active:before {
+    transform: rotate(-45deg) translate(-8px, 6px);
+}
+
+.hamburger.is-active:after {
+    transform: rotate(45deg) translate(-7px, -4px);
+}
+
+.hamburger.is-active .bar {
+    opacity: 0;
+}
 
 nav h1 {
     color: white;
