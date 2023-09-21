@@ -30,6 +30,6 @@ Having user created project categories for each todo added an additional difficu
 ## Potential improvements
 
 - Utilise a unique ID rather than relying on a ticker for todo reference number
-- Utilise SOLID principles to improve functions and have clearer application flow.
+- Convert impure functions to pure where possible and have clearer application flow.
 - Improve design/UI
 - More commenting within the application
