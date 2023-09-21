@@ -1,6 +1,6 @@
 # todo-list
 
-live preview of the site is available [here](https://lknapp1888.github.io/todo-list/)
+Live preview of the site is available [here](https://lknapp1888.github.io/todo-list/)
 
 ## Project aims
 
